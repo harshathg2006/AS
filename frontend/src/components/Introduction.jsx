@@ -12,8 +12,9 @@ export default function Introduction() {
       <div className="intro-top">
         <h2 className="intro-main-title">Introduction</h2>
         <p className="intro-sub">
-          AyuSahayak brings structured and accessible healthcare support to villages by 
-          connecting trained nurses, trusted hospitals, and patients through a smart digital platform.
+          AyuSahayak brings structured and accessible healthcare to villages by
+          connecting trained nurses, trusted nearby hospitals, and patients
+          through a safe, doctor-supervised digital platform.
         </p>
       </div>
 
@@ -30,7 +31,7 @@ export default function Introduction() {
               loop
               controls
               playsInline
-            ></video>
+            />
           </div>
         </div>
 
@@ -41,13 +42,13 @@ export default function Introduction() {
           </h2>
 
           <p className="intro-description">
-            AyuSahayak ensures that trained nurses from villages can connect patients 
-            to qualified hospital doctors for high-quality treatment. Whether it’s 
-            primary care, digital consultations, or emergency assistance, we make 
-            healthcare simple, reliable, and reachable.
+            AyuSahayak enables village nurses to connect patients with qualified
+            doctors from nearby hospitals for safe, fast, and accountable care.
+            The platform supports primary treatment, supervised procedures,
+            digital consultations, and timely referrals.
           </p>
 
-          <button 
+          <button
             className="intro-btn"
             onClick={() => setOpenModal(true)}
           >
@@ -63,62 +64,111 @@ export default function Introduction() {
           <div className="intro-modal">
 
             {/* Close Button */}
-            <button 
-              className="modal-close-btn" 
+            <button
+              className="modal-close-btn"
               onClick={() => setOpenModal(false)}
             >
               ✕
             </button>
 
-            <h2 className="modal-title">About Us</h2>
+            <h2 className="modal-title">About AyuSahayak</h2>
 
             <div className="modal-content">
 
-              <p><strong>Mission:</strong> To ensure that every rural citizen of India has access to high-quality doctors and medical services at their convenience and at affordable prices.</p>
+              <p>
+                <strong>Mission:</strong> To ensure every rural citizen of India
+                has access to qualified doctors and safe medical services at
+                affordable cost and minimal travel.
+              </p>
 
-              <p><strong>Vision:</strong> To be the nearest, most affordable, and reliable digital healthcare destination for rural India.</p>
+              <p>
+                <strong>Vision:</strong> To become the most trusted hospital-backed
+                digital healthcare platform for rural India.
+              </p>
 
               <br />
 
+              {/* 🔹 AI DESIGN PHILOSOPHY */}
+              <h3>🧠 Our AI Design Philosophy</h3>
+              <p>
+                AyuSahayak’s AI is designed to think the way a real doctor thinks —
+                not the way traditional disease-prediction models work.
+              </p>
+
+              <p>
+                A real doctor does not first predict a disease and then decide
+                severity. Many diseases share overlapping symptoms, so doctors
+                instead assess symptom meaning, vitals, and risk before deciding
+                the next step.
+              </p>
+
+              <p>
+                Our AI follows this same logic by structuring symptoms,
+                asking targeted follow-up questions, and classifying cases as
+                <strong> low, medium, or high risk</strong>.
+              </p>
+
+              <br />
+
+              {/* 🔹 AI MODULES */}
               <h3>📌 Our Healthcare Modules</h3>
-              <p>
-                AyuSahayak uses <strong>three specialized medical modules</strong> powered by AI and trained nurses:
-              </p>
-
               <ul>
-                <li><strong>1. Skin Disease Module</strong> — Nurses upload skin images and symptoms; AI assists doctors by analyzing patterns to support diagnosis.</li>
-                <li><strong>2. Wound Analysis Module</strong> — AI evaluates wound depth, type, and severity to help the doctor choose accurate treatment.</li>
-                <li><strong>3. Rural AI Symptom Detection</strong> — Patients’ symptoms are analyzed to predict possible diseases and suggest supporting medications.</li>
+                <li>
+  <strong>1. Rural Care AI Module</strong> — Structures symptoms, asks
+  differentiation questions, and classifies risk so overlapping disease
+  symptoms are handled safely under doctor supervision.
+</li>
+
+
+                <li>
+                  <strong>2. Skin Care AI Module</strong> — Uses multimodal fusion
+                  by combining skin images with symptom understanding, because
+                  image-only AI is unsafe for visually similar skin conditions.
+                </li>
+
+                <li>
+                  <strong>3. Wound Care AI Module</strong> — Assists doctors by
+                  assessing wound severity and infection risk to guide local
+                  care or hospital referral decisions.
+                </li>
               </ul>
 
               <br />
 
-              <h3>📌 What Makes AyuSahayak Unique?</h3>
-              <ul>
-                <li>Bridges hospitals and rural villages through digital healthcare.</li>
-                <li>Provides 24/7 nurse support and doctor availability.</li>
-                <li>AI-powered modules enhance the accuracy and speed of diagnosis.</li>
-                <li>Complete workflow: registration → payment → consultation → prescription → follow-up.</li>
-                <li>Cloud-based storage ensures lifetime medical record preservation.</li>
-              </ul>
-
-              <br />
-
-              <h3>⚙ Our Technology</h3>
+              {/* 🔹 SAFETY & SCOPE */}
+              <h3>🔐 Safety, Scope & Guardrails</h3>
               <p>
-                Built using modern technologies such as <strong>React.js</strong> (frontend), 
-                <strong>Node.js</strong> (backend), <strong>MongoDB</strong> (database), 
-                <strong>Cloudinary</strong> (image storage), <strong>Razorpay</strong> (payments),
-                and real-time <strong>video + chat</strong> for consultations.
+                Our AI is intentionally limited in scope. It focuses only on
+                high-frequency rural cases such as common infections, chronic
+                conditions, and skin or wound problems, with strict escalation
+                for anything outside this range.
+              </p>
+
+              <p>
+                If inputs are unclear or irrelevant, the system stops and asks
+                for clarification instead of guessing. All AI outputs are
+                advisory — final decisions are always made by qualified doctors.
               </p>
 
               <br />
 
+              {/* 🔹 TECHNOLOGY */}
+              <h3>⚙ Technology Stack</h3>
+              <p>
+                AyuSahayak is built using <strong>React.js</strong>,
+                <strong> Node.js</strong>, <strong>MongoDB</strong>, and deployed
+                on cloud infrastructure. AI components use semantic embeddings,
+                multimodal models, and explainability tools such as Grad-CAM.
+              </p>
+
+              <br />
+
+              {/* 🔹 PURPOSE */}
               <h3>🏥 Our Purpose</h3>
               <p>
-                AyuSahayak aims to eliminate the healthcare gap between rural and urban India.  
-                By empowering nurses, supporting doctors, and simplifying healthcare access,  
-                we ensure no patient is left behind due to lack of medical reach.
+                By empowering nurses, supporting doctors, and keeping hospitals
+                accountable, AyuSahayak replaces unsafe RMP dependency with a
+                trusted, legal, and scalable rural healthcare model.
               </p>
 
               <br /><br />
