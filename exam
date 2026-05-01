@@ -1,0 +1,136 @@
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO_TRIGGER = 18
+GPIO_ECHO = 24
+
+GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
+GPIO.setup(GPIO_ECHO, GPIO.IN)
+
+def distance():
+    GPIO.output(GPIO_TRIGGER, True)
+    time.sleep(0.00001)
+    GPIO.output(GPIO_TRIGGER, False)
+
+    StartTime = time.time()
+    StopTime = time.time()
+
+    while GPIO.input(GPIO_ECHO) == 0:
+        StartTime = time.time()
+
+    while GPIO.input(GPIO_ECHO) == 1:
+        StopTime = time.time()
+
+    TimeElapsed = StopTime - StartTime
+    dist = (TimeElapsed * 34300) / 2
+
+    return dist
+
+if __name__ == '__main__':
+    try:
+        while True:
+            dist = distance()
+            print("Measured Distance = %.1f cm" % dist)
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+        print("Measurement stopped by User")
+        GPIO.cleanup()
+
+***************************************************************
+
+Image Capture
+import picamera
+from time import sleep
+
+camera = picamera.PiCamera()
+camera.rotation = 180
+
+camera.start_preview()
+sleep(5)
+camera.capture('/home/pi/Desktop/image.jpg')
+camera.stop_preview()
+
+*********************************************************************
+
+Modify Image (Effects + Text)
+from picamera import PiCamera, Color
+from time import sleep
+
+camera = PiCamera()
+camera.rotation = 180
+
+camera.start_preview()
+camera.image_effect = 'watercolor'
+camera.annotate_background = Color('yellow')
+camera.annotate_foreground = Color('blue')
+camera.annotate_text_size = 80
+camera.annotate_text = "Hello KMIT"
+
+for i in range(5):
+    sleep(5)
+    camera.capture('/home/pi/Desktop/Raspi%s.jpg' % i)
+
+camera.stop_preview()
+
+*********************************************************************
+
+Video Recording
+from picamera import PiCamera
+from time import sleep
+
+camera = PiCamera()
+camera.rotation = 180
+
+camera.start_preview()
+camera.start_recording('/home/pi/Desktop/video.h264')
+sleep(10)
+camera.stop_recording()
+camera.stop_preview()
+
+***********************************************************************
+
+LED Blinking Program
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+
+GPIO.setup(8, GPIO.OUT)
+
+while True:
+    GPIO.output(8, GPIO.HIGH)
+    time.sleep(1)
+    GPIO.output(8, GPIO.LOW)
+    time.sleep(1)
+
+****************************************************************
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+
+GPIO.setup(11, GPIO.IN)
+GPIO.setup(3, GPIO.OUT)
+
+while True:
+    i = GPIO.input(11)
+    
+    if i == 0:
+        print("No Person detected", i)
+        GPIO.output(3, 0)
+        time.sleep(0.1)
+
+    elif i == 1:
+        print("A Person is detected", i)
+        GPIO.output(3, 1)
+        time.sleep(0.1)
+
+
+
+
+
