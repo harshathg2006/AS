@@ -1,0 +1,111 @@
+✅ ✅ FINAL NODE.js CODE (COPY THIS EXACTLY)
+📄 app.js
+
+const express = require('express');
+const app = express();
+
+// Elastic Beanstalk uses dynamic port
+const PORT = process.env.PORT || 3000;
+
+// Home route
+app.get('/', (req, res) => {
+res.send('Hello from AWS Elastic Beanstalk 🚀');
+});
+
+// Start server
+app.listen(PORT, () => {
+console.log(Server running on port ${PORT});
+});
+
+📄 package.json
+
+{
+"name": "eb-node-app",
+"version": "1.0.0",
+"description": "Node.js app for AWS Elastic Beanstalk",
+"main": "app.js",
+"scripts": {
+"start": "node app.js"
+},
+"dependencies": {
+"express": "^4.18.2"
+}
+}
+
+📁 FINAL FOLDER STRUCTURE (IMPORTANT)
+app.js
+package.json
+
+👉 Select BOTH → Right click → ZIP them
+
+🚀 FINAL EXPERIMENT STEPS (WRITE IN EXAM)
+🔹 Step 1: Open Elastic Beanstalk
+6
+Login to AWS Console
+In search bar → type Elastic Beanstalk
+Click Elastic Beanstalk
+Click 👉 Create Application
+🔹 Step 2: Create Application
+5
+Enter Application Name → MyNodeApp
+Description → optional
+Click 👉 Create
+🔹 Step 3: Create Environment
+6
+Click 👉 Create Environment
+Select 👉 Web Server Environment
+Click 👉 Select
+🔹 Step 4: Configure Environment
+6
+Environment Name → node-env
+Platform:
+Select 👉 Node.js
+Application Code:
+Choose 👉 Upload your code
+Click 👉 Choose File
+Upload your .zip
+🔹 Step 5: Configure Service Access
+Service Role → LabRole
+EC2 Key Pair → optional
+EC2 Instance Profile → LabInstanceProfile
+🔹 Step 6: Configure Network
+6
+VPC → Default
+Subnets → select available
+Enable 👉 Public IP
+🔹 Step 7: Instance & Scaling
+6
+Instance type → t2.micro
+Min instances → 1
+Max instances → 2
+Enable 👉 Load Balancer
+🔹 Step 8: Review & Create
+Click 👉 Review
+Click 👉 Create
+
+⏳ Wait 3–5 minutes
+
+🌐 Step 9: Access Application
+4
+Go to Environment dashboard
+Copy 👉 Domain URL
+Open in browser
+
+✅ Output:
+
+Hello from AWS Elastic Beanstalk 🚀
+🔄 Updating Application
+Open Environment
+Click 👉 Upload and Deploy
+Upload new ZIP
+⚠️ VERY IMPORTANT (WRITE IN VIVA)
+✔ Must use:
+process.env.PORT
+✔ Files must be:
+At root level
+✔ Required:
+package.json
+start script
+🧠 ONE-LINE MEMORY
+
+👉 Elastic Beanstalk = Upload ZIP → AWS runs app automatically
