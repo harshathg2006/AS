@@ -1,0 +1,181 @@
+🧪 ✅ PART 1: Create VPC + Subnets
+🔹 Step 1: Open VPC Dashboard
+Login to AWS
+In search bar → type VPC → click it
+Left side → click Your VPCs
+🔹 Step 2: Create VPC
+Click Create VPC
+Choose VPC only
+Enter:
+Name: MyVPC
+IPv4 CIDR: 10.0.0.0/16
+Click Create VPC
+🔹 Step 3: Create Subnets
+Public Subnet
+Left side → Subnets
+Click Create subnet
+Select your VPC
+Name: Public-Subnet
+CIDR: 10.0.1.0/24
+Click Create
+Private Subnet
+Click Create subnet
+Name: Private-Subnet
+CIDR: 10.0.2.0/24
+Click Create
+🌐 ✅ PART 2: Internet Setup
+🔹 Step 4: Create Internet Gateway
+Left side → Internet Gateways
+Click Create internet gateway
+Name: My-IGW
+Click Create
+
+👉 Now attach:
+5. Click Actions → Attach to VPC
+6. Select your VPC → Attach
+
+🔹 Step 5: Route Table for Public Subnet
+Left → Route Tables
+Click Create route table
+Name: Public-RT
+Select your VPC → Create
+Attach Public Subnet
+Select Public-RT
+Click Subnet associations tab
+Click Edit subnet associations
+Select Public-Subnet → Save
+Add Internet Route
+Go to Routes tab
+Click Edit routes → Add route
+Enter:
+Destination: 0.0.0.0/0
+Target: Internet Gateway
+Save
+💻 ✅ PART 3: Launch EC2 Instances
+🔹 Step 6: Launch Bastion Server
+Go to EC2 Dashboard
+Click Launch instance
+
+Fill:
+
+Name: Bastion-Server
+AMI: Ubuntu
+Instance type: t2.micro
+
+👉 Key pair:
+
+Click Create new key
+Name: bastion.pem
+Download it
+
+👉 Network:
+
+VPC: your VPC
+Subnet: Public-Subnet
+Enable Auto-assign Public IP
+
+👉 Security Group:
+
+Allow SSH (22) → My IP
+
+Click Launch
+
+🔹 Step 7: Launch Database Server
+Click Launch instance
+
+Fill:
+
+Name: DB-Server
+AMI: Ubuntu
+
+👉 Key pair:
+
+Create: dbserver.pem
+
+👉 Network:
+
+Subnet: Private-Subnet
+Auto-assign Public IP: ❌ Disable
+
+👉 Security Group:
+
+Allow:
+SSH (22) → Custom → Bastion Private IP
+MySQL (3306) → Custom → 10.0.1.0/24
+
+Click Launch
+
+🔑 ✅ PART 4: Connect via Bastion
+🔹 Step 8: Connect to Bastion
+
+Open terminal / Git Bash:
+
+ssh -i bastion.pem ubuntu@<BASTION_PUBLIC_IP>
+🔹 Step 9: Copy DB Key to Bastion
+
+From your local system:
+
+scp -i bastion.pem dbserver.pem ubuntu@<BASTION_PUBLIC_IP>:/home/ubuntu/
+🔹 Step 10: SSH into DB from Bastion
+
+Inside bastion:
+
+ls
+
+Then:
+chmod 400 dbserver.pem
+
+ssh -i dbserver.pem ubuntu@10.0.2.x
+
+👉 Now you are inside DB server ✅
+
+❌ Problem (You will face)
+sudo apt update
+
+👉 ❌ Will fail (No internet)
+
+🌍 ✅ PART 5: Setup NAT Gateway
+🔹 Step 11: Allocate Elastic IP
+Go to VPC → Elastic IPs
+Click Allocate Elastic IP
+Click Allocate
+🔹 Step 12: Create NAT Gateway
+Left → NAT Gateways
+Click Create NAT Gateway
+
+Fill:
+
+Name: My-NAT
+Subnet: Public-Subnet
+Elastic IP: Select created IP
+
+Click Create
+
+🔁 ✅ PART 6: Private Route Table
+🔹 Step 13: Create Route Table
+Go to Route Tables
+Click Create route table
+Name: Private-RT
+Select VPC → Create
+🔹 Step 14: Attach Private Subnet
+Select Private-RT
+Subnet associations → Edit
+Select Private-Subnet → Save
+🔹 Step 15: Add NAT Route
+Go to Routes tab
+Click Edit routes → Add route
+
+Enter:
+
+Destination: 0.0.0.0/0
+Target: NAT Gateway
+
+Click Save
+
+✅ PART 7: Test Internet
+
+Go back to DB server:
+
+sudo apt update
+
+👉 ✅ Now it will work
