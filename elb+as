@@ -1,0 +1,244 @@
+🚀 WEEK-9: ELB + Auto Scaling (Beginner Step-by-Step)
+
+We’ll do this in 5 parts:
+
+Create 2 EC2 servers
+Install website on both
+Create Load Balancer
+Create Auto Scaling
+Test everything
+🧩 PART 1: Create EC2 Instance 1
+👉 Step-by-step clicks
+Open AWS Console
+In search bar → type EC2 → click
+👉 Amazon EC2
+Left side menu → click Instances
+Click “Launch Instance” (orange button top right)
+🧾 Fill details
+Name → webserver-1
+AMI (OS)
+👉 Select: Amazon Linux 2
+Instance Type
+👉 Select: t2.micro (free tier)
+Key Pair
+👉 Click:
+“Create new key pair” (if not created)
+Name: my-key
+Download it (VERY IMPORTANT)
+🔐 Security Group
+
+Scroll down → “Network settings”
+
+Click Edit
+
+Add rules:
+
+Type	Port	Source
+SSH	22	My IP
+HTTP	80	Anywhere (0.0.0.0/0)
+🚀 Launch
+
+Click Launch Instance
+
+💻 Connect & Setup Server 1
+Go to Instances
+Select webserver-1
+Click Connect
+Click EC2 Instance Connect
+Click Connect
+👉 Run these commands
+sudo yum update -y
+sudo yum install httpd -y
+sudo systemctl start httpd
+sudo systemctl enable httpd
+echo "This is Server 1" | sudo tee /var/www/html/index.html
+🧩 PART 2: Create EC2 Instance 2
+
+Repeat SAME steps 👇
+
+Name → webserver-2
+
+After connecting, run:
+
+sudo yum update -y
+sudo yum install httpd -y
+sudo systemctl start httpd
+sudo systemctl enable httpd
+echo "This is Server 2" | sudo tee /var/www/html/index.html
+🌐 PART 3: Create Load Balancer
+
+We use:
+👉 Application Load Balancer
+
+🔐 Step 3.1: Create Security Group for LB
+EC2 Dashboard → Left side → Security Groups
+Click Create security group
+
+Fill:
+
+Name → lb-sg
+Description → load balancer sg
+
+Add rule:
+
+Type	Port	Source
+HTTP	80	0.0.0.0/0
+
+Click Create
+
+⚖️ Step 3.2: Create Load Balancer
+EC2 Dashboard → Left → Load Balancers
+Click Create Load Balancer
+
+You’ll see options → choose:
+
+👉 Application Load Balancer
+
+Click Create
+
+🧾 Fill details
+Name → my-alb
+Scheme → Internet-facing
+IP → IPv4
+🔊 Listener
+
+Already there:
+
+HTTP : 80 (keep as is)
+🌍 Network Mapping
+Select Default VPC
+Select 2 subnets (tick any 2)
+🔐 Security Group
+Select → lb-sg
+🎯 Step 3.3: Target Group
+
+Click Create target group
+
+Fill:
+
+Name → web-servers-tg
+Target type → Instance
+Protocol → HTTP
+Port → 80
+
+Click Next
+
+🧾 Register Targets
+Select:
+webserver-1
+webserver-2
+
+Click:
+👉 Include as pending
+
+Then:
+👉 Create target group
+
+✅ Final Step
+
+Back to Load Balancer page:
+
+Select created target group
+Click Create Load Balancer
+
+⏳ Wait 2–3 minutes
+
+🌍 PART 4: Test Load Balancer
+Go to → Load Balancers
+Click my-alb
+Copy DNS name
+
+Example:
+
+my-alb-xxxx.elb.amazonaws.com
+Paste in browser
+
+👉 Refresh multiple times
+
+You should see:
+
+"This is Server 1"
+"This is Server 2"
+
+🎉 Load balancing working!
+
+🔁 PART 5: Auto Scaling Setup
+
+We use:
+👉 Amazon EC2 Auto Scaling
+
+📸 Step 5.1: Create AMI
+EC2 → Instances
+Select webserver-1
+Top menu → Actions
+Click:
+→ Image and templates
+→ Create Image
+
+Fill:
+
+Name → my-webserver-AMI
+
+Click Create
+
+⏳ Wait → status = Available
+
+📦 Step 5.2: Launch Template
+EC2 → Left → Launch Templates
+Click Create launch template
+
+Fill:
+
+Name → my-launch-template
+AMI → select your AMI
+Instance type → t2.micro
+Key pair → select existing
+🔐 Security Group (IMPORTANT)
+
+⚠️ Select same SG as EC2 (allow HTTP + SSH)
+👉 NOT lb-sg alone (common mistake)
+
+Click Create
+
+🔄 Step 5.3: Auto Scaling Group
+EC2 → Left → Auto Scaling Groups
+Click Create Auto Scaling Group
+🧾 Fill
+Name → webserver-asg
+Launch Template → select yours
+
+Click Next
+
+🌍 Network
+VPC → Default
+Select ALL subnets
+🔗 Attach Load Balancer
+Select:
+👉 Attach existing load balancer
+Choose your ALB
+Choose target group
+❤️ Health Check
+Type → HTTP
+Grace period → 300
+📊 Capacity
+Desired → 2
+Min → 1
+Max → 4
+
+Click Next → Create
+
+🧪 PART 6: Testing Auto Scaling
+🔥 Test 1: Kill Instance
+Go → EC2 Instances
+Select one instance
+Click Terminate
+
+👉 Wait 1–2 minutes
+
+✅ New instance will be created automatically
+
+🌐 Test 2: Load Balancer
+Open ALB DNS again
+Refresh
+
+👉 Traffic still works
