@@ -1,0 +1,208 @@
+🌐 STEP 0: Open AWS Console
+Go to 👉 https://aws.amazon.com/console
+Click “Sign in to Console”
+Login
+
+At the top, you’ll see a search bar (very important — we’ll use this everywhere)
+
+🪣 STEP 1: Create S3 Bucket
+🔍 Find S3
+In top search bar → type S3
+Click S3 (Simple Storage Service)
+➕ Create Bucket
+On S3 page → click “Create bucket” (big orange button)
+📝 Fill details
+Bucket name → type: my-first-bucket-harsha (must be unique)
+Region → leave default
+⚙️ Scroll down
+Find “Bucket Versioning”
+Click Enable
+✅ Create
+Scroll down → click “Create bucket”
+
+✔️ Done
+
+🗄️ STEP 2: Create DynamoDB Table
+🔍 Open DynamoDB
+Search → DynamoDB
+Click it
+➕ Create Table
+Click “Create table”
+📝 Fill details
+Table name → newtable
+Partition key:
+Name → unique
+Type → String
+
+👉 Leave everything else default
+
+✅ Create
+Click “Create table”
+
+✔️ Done
+
+⚡ STEP 3: Create Lambda Function
+🔍 Open Lambda
+Search → Lambda
+Click it
+➕ Create Function
+Click “Create function”
+🧱 Choose
+Select → Author from scratch
+📝 Fill details
+Function name → S3ToDynamoFunction
+Runtime → choose Python 3.x
+🔐 Permissions
+Select:
+Create a new role with basic Lambda permissions
+✅ Create
+Click “Create function”
+
+✔️ Done
+
+🔗 STEP 4: Add S3 Trigger
+
+Inside your Lambda page:
+
+➕ Add Trigger
+Click “Add trigger” (left side)
+⚙️ Configure
+Trigger type → select S3
+Bucket → choose your bucket (my-first-bucket-harsha)
+Event type → select:
+All object create events
+☑️ Checkbox
+Tick: “I acknowledge…”
+✅ Add
+Click “Add”
+
+✔️ Done
+
+💻 STEP 5: Add Code
+🧾 Find Code Editor
+Scroll down in Lambda page
+You’ll see Code Source editor
+✏️ Replace existing code with this:
+import boto3
+from uuid import uuid4
+
+def lambda_handler(event, context):
+    dynamodb = boto3.resource('dynamodb')
+
+    if 'Records' in event:
+        for record in event['Records']:
+            bucket_name = record['s3']['bucket']['name']
+            object_key = record['s3']['object']['key']
+            size = record['s3']['object'].get('size', -1)
+            event_name = record.get('eventName', 'Unknown')
+            event_time = record.get('eventTime', 'Unknown')
+
+            table = dynamodb.Table('newtable')
+
+            table.put_item(
+                Item={
+                    'unique': str(uuid4()),
+                    'Bucket': bucket_name,
+                    'Object': object_key,
+                    'Size': size,
+                    'Event': event_name,
+                    'EventTime': event_time
+                }
+            )
+    else:
+        print("No Records found")
+⚠️ IMPORTANT
+If your table name ≠ newtable, change it
+If partition key ≠ unique, change it
+💾 Save & Deploy
+Click “Deploy” (orange button)
+
+✔️ Done
+
+🔐 STEP 5.5 (ONLY if error comes)
+
+If you get permission error, do this:
+
+🔍 Open IAM
+Search → IAM
+Click
+👤 Roles
+Click Roles
+Click your Lambda role (name will be similar)
+➕ Add Permission
+Click Add permissions
+Click Create inline policy
+🧾 JSON tab
+
+Paste:
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "dynamodb:PutItem",
+      "Resource": "*"
+    }
+  ]
+}
+✅ Create
+Click Next
+Name → lambda-dynamo-policy
+Click Create policy
+
+✔️ Done
+
+📤 STEP 6: Test (VERY IMPORTANT)
+Upload file to S3
+Go to S3
+Click your bucket
+Click Upload
+Click Add files
+Select any file
+Click Upload
+🔍 Check DynamoDB
+Go to DynamoDB
+Click your table
+Click Explore table items
+Click Run
+
+👉 You will see data like:
+
+Bucket name
+File name
+Size
+Event
+
+✔️ SUCCESS 🎉
+
+📊 STEP 7: CloudWatch Logs
+Go to Lambda
+Open your function
+Monitor
+Click Monitor tab
+Logs
+Click View CloudWatch logs
+Open latest log stream
+Click latest timestamp
+
+👉 You can see execution logs
+
+🧠 FINAL UNDERSTANDING (VERY IMPORTANT FOR EXAM)
+
+Flow:
+
+Upload file → S3 bucket
+        ↓
+S3 trigger → Lambda runs
+        ↓
+Lambda code executes
+        ↓
+Data stored in DynamoDB
+💥 PRO TIP (EXAM GOLD LINE)
+
+👉 This is called a Serverless Architecture using:
+
+Amazon S3
+AWS Lambda
+Amazon DynamoDB
