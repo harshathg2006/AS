@@ -1,0 +1,327 @@
+STEP 1: Login to AWS
+Open AWS
+Open Chrome browser
+Go to: https://aws.amazon.com
+Click: Sign In to Console
+
+You can find this button at the top-right corner.
+
+Enter:
+Email
+Password
+Click: Sign In
+
+Now you will see the AWS Dashboard.
+
+STEP 2: Open VPC Service
+Search for VPC
+At the top of AWS page, you will see a search bar.
+Click the search bar.
+Type: VPC
+Click the service named: VPC
+
+Now VPC Dashboard opens.
+
+STEP 3: Create a VPC
+Where is the Button?
+
+On left side menu:
+
+Click: Your VPCs
+
+At top-right:
+
+Click orange button: Create VPC
+Fill Details
+
+Choose:
+
+VPC only
+
+Enter:
+
+Field	Value
+Name tag	Custom-VPC
+IPv4 CIDR	10.0.0.0/16
+IPv6 CIDR	No IPv6 CIDR Block
+Tenancy	Default
+
+After filling:
+
+Click orange button: Create VPC
+
+You will see:
+
+“Successfully created VPC”
+STEP 4: Create Public Subnet
+Open Subnets
+
+Left side menu:
+
+Click: Subnets
+
+Top-right:
+
+Click: Create subnet
+Fill Public Subnet Details
+Select VPC
+
+Click dropdown under:
+
+VPC ID
+
+Select:
+
+Custom-VPC
+Subnet Settings
+Field	Value
+Subnet name	Public-Subnet
+Availability Zone	ap-south-1a
+IPv4 CIDR block	10.0.1.0/24
+
+Now click:
+
+Create subnet
+
+Public subnet created.
+
+STEP 5: Create Private Subnet
+
+Again click:
+
+Create subnet
+
+Fill:
+
+Field	Value
+Subnet name	Private-Subnet
+Availability Zone	ap-south-1a
+IPv4 CIDR block	10.0.2.0/24
+
+Click:
+
+Create subnet
+
+Private subnet created.
+
+STEP 6: Create Internet Gateway (IGW)
+Open Internet Gateways
+
+Left menu:
+
+Click: Internet Gateways
+
+Top-right:
+
+Click: Create internet gateway
+Fill Details
+Field	Value
+Name tag	My-IGW
+
+Click:
+
+Create internet gateway
+STEP 7: Attach IGW to VPC
+
+After creating:
+
+Select checkbox beside My-IGW
+Top-right click: Actions
+Click: Attach to VPC
+
+A popup opens.
+
+Select: Custom-VPC
+Click: Attach internet gateway
+
+Done.
+
+STEP 8: Create Public Route Table
+Open Route Tables
+
+Left menu:
+
+Click: Route Tables
+
+Top-right:
+
+Click: Create route table
+Fill Details
+Field	Value
+Name	Public-RT
+VPC	Custom-VPC
+
+Click:
+
+Create route table
+STEP 9: Add Internet Route
+Select Public-RT
+Bottom section tabs appear
+Click: Routes tab
+Click: Edit routes
+Click: Add route
+
+Fill:
+
+Destination	Target
+0.0.0.0/0	Internet Gateway
+
+Then select:
+
+My-IGW
+
+Now click:
+
+Save changes
+STEP 10: Associate Public Subnet
+Open Public-RT
+Click tab: Subnet associations
+Click: Edit subnet associations
+Tick checkbox: Public-Subnet
+Click: Save associations
+
+Done.
+
+STEP 11: Launch EC2 Instance
+Open EC2 Service
+
+Top search bar:
+
+Type: EC2
+
+Click:
+
+EC2
+Launch Instance
+Left menu click: Instances
+Top-right click orange button: Launch instances
+STEP 12: Configure EC2
+Instance Name
+
+Under Name:
+
+Enter: MyServer
+Choose AMI
+
+Under:
+
+Amazon Machine Image (AMI)
+
+Select:
+
+Amazon Linux 2 AMI
+Instance Type
+
+Select:
+
+t2.micro
+
+Free tier eligible.
+
+STEP 13: Create Key Pair
+Where?
+
+Scroll to:
+
+Key pair section
+
+Click:
+
+Create new key pair
+Fill Details
+Field	Value
+Key pair name	my-key
+Key pair type	RSA
+Private key format	.pem
+
+Click:
+
+Create key pair
+
+Important:
+
+PEM file downloads automatically.
+Do NOT delete it.
+Store safely.
+STEP 14: Network Settings
+
+In Network settings:
+
+Click:
+
+Edit
+
+Fill:
+
+Setting	Value
+VPC	Custom-VPC
+Subnet	Public-Subnet
+Auto-assign Public IP	Enable
+Security Group Rules
+
+Allow SSH:
+
+Type	Port	Source
+SSH	22	Anywhere
+STEP 15: Launch Instance
+
+Review everything.
+
+Now click orange button:
+
+Launch instance
+
+Wait few seconds.
+
+You will see:
+
+“Successfully launched instance”
+STEP 16: Connect to EC2 Instance
+Open Instance
+Click: View all instances
+Select your instance checkbox.
+Connect Button
+
+Top-right click:
+
+Connect
+
+You will see multiple tabs.
+
+Click:
+
+EC2 Instance Connect
+
+Then click orange button:
+
+Connect
+
+A terminal opens.
+
+Congratulations. You are now connected to Linux server.
+
+STEP 17: Test Commands
+
+Inside terminal type:
+
+pwd
+
+Press Enter.
+
+Then:
+
+ls
+
+Then:
+
+sudo yum update -y
+OUTPUT
+
+You successfully:
+
+Created VPC
+Created Public & Private Subnets
+Attached Internet Gateway
+Configured Route Table
+Launched EC2 Instance
+Connected to EC2 Server
