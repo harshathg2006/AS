@@ -1,0 +1,508 @@
+Create and Attach EBS Volume + Increase CPU/RAM
+PART A — Create and Attach EBS Volume
+STEP 1 — Login to AWS
+Open browser
+Go to AWS Console
+Login with your AWS account
+
+After login, you will see:
+
+Search bar on top
+Services
+EC2 option
+STEP 2 — Open EC2 Dashboard
+Where is the button?
+
+Top search bar → type:
+
+EC2
+
+Click:
+
+EC2
+
+Now EC2 Dashboard opens.
+
+STEP 3 — Open Volumes Section
+
+Left side menu → scroll little down
+
+You will see:
+
+Elastic Block Store
+
+Under it click:
+
+Volumes
+
+(Exactly as shown in page 1 images)
+
+STEP 4 — Create Volume
+
+Top right corner click:
+
+Create Volume
+
+Now new page opens.
+
+STEP 5 — Fill Volume Details
+
+You will see options:
+
+Volume Type
+
+Choose:
+
+gp3
+Size
+
+Enter:
+
+10 GB
+
+(or 20 GB)
+
+Availability Zone
+
+IMPORTANT:
+
+Choose SAME zone as EC2 instance.
+
+Example:
+
+us-east-1a
+
+If wrong zone → volume cannot attach.
+
+STEP 6 — Create Volume
+
+Scroll down
+
+Click orange button:
+
+Create Volume
+
+Done ✅
+
+STEP 7 — Attach Volume to EC2
+
+Go back to:
+
+Volumes
+
+Click newly created volume checkbox.
+
+Top side click:
+
+Actions
+
+Dropdown opens.
+
+Click:
+
+Attach Volume
+
+(Shown clearly in page 4 screenshot)
+
+STEP 8 — Select Instance
+
+Now screen asks:
+
+Instance
+
+Choose your EC2 instance.
+
+Device Name
+
+Type:
+
+/dev/xvdf
+
+Now click:
+
+Attach Volume
+
+Done ✅
+
+STEP 9 — Connect to EC2 Instance
+
+Go left menu:
+
+Instances
+
+Select instance.
+
+Top click:
+
+Connect
+
+Then click:
+
+EC2 Instance Connect
+
+Then click orange button:
+
+Connect
+
+Terminal opens.
+
+STEP 10 — Check Attached Disk
+
+Inside terminal type:
+
+lsblk
+
+Press Enter.
+
+You will see new disk like:
+
+nvme1n1
+
+(Shown in page 5 and 13)
+
+PART B — Increase CPU and RAM
+
+This means changing instance type.
+
+Example:
+
+t2.micro → low RAM
+t2.medium → more RAM + CPU
+STEP 1 — Go to Instances
+
+Left menu:
+
+Instances
+
+Select your instance.
+
+STEP 2 — Stop Instance
+
+Top click:
+
+Instance State
+
+Click:
+
+Stop Instance
+
+Wait until state becomes:
+
+Stopped
+STEP 3 — Change Instance Type
+
+Top click:
+
+Actions
+
+Then:
+
+Instance Settings
+
+Then:
+
+Change Instance Type
+
+(Shown in page 9 image)
+
+STEP 4 — Select Bigger Instance
+
+Choose example:
+
+t2.small
+
+or
+
+t2.medium
+
+These give more:
+
+CPU
+RAM
+
+Now click:
+
+Apply
+STEP 5 — Start Instance Again
+
+Top click:
+
+Instance State
+
+Click:
+
+Start Instance
+
+Done ✅
+
+Your EC2 now has more CPU and RAM.
+
+EXPERIMENT 2
+Permanently Mount EBS Volume
+
+Goal:
+Even after reboot, data should remain.
+
+STEP 1 — Connect to EC2
+
+Open terminal using Connect button.
+
+STEP 2 — Check Disks
+
+Type:
+
+lsblk
+
+You will see:
+
+nvme0n1 → old disk
+nvme1n1 → new disk
+STEP 3 — Create Partition
+
+Type:
+
+sudo fdisk /dev/nvme1n1
+
+Now terminal asks commands.
+
+Type one by one:
+
+n
+
+Press Enter.
+
+Then:
+
+p
+
+Press Enter.
+
+Press Enter 3 more times.
+
+Then type:
+
+w
+
+Press Enter.
+
+Done partition created ✅
+
+(Page 14 shows this clearly)
+
+STEP 4 — Inform Linux
+
+Type:
+
+sudo partprobe
+STEP 5 — Verify Partition
+
+Type:
+
+lsblk
+
+Now you should see:
+
+nvme1n1p1
+STEP 6 — Format Partition
+
+Type:
+
+sudo mkfs.xfs /dev/nvme1n1p1
+
+This prepares disk for storage.
+
+STEP 7 — Create Folder for Mounting
+
+Type:
+
+sudo mkdir /mnt/archana
+
+You can use any name.
+
+Example:
+
+/mnt/data
+STEP 8 — Mount Volume
+
+Type:
+
+sudo mount /dev/nvme1n1p1 /mnt/archana
+STEP 9 — Check Mounted Storage
+
+Type:
+
+df -h
+
+You will see mounted folder.
+
+(Page 17 shows this output)
+
+STEP 10 — Permanent Mount Using fstab
+Get UUID
+
+Type:
+
+sudo blkid /dev/nvme1n1p1
+
+Copy UUID value.
+
+Example:
+
+1234-abcd
+Open fstab file
+
+Type:
+
+sudo nano /etc/fstab
+Add This Line at Bottom
+UUID=your-uuid /mnt/archana xfs defaults,nofail 0 0
+
+Example:
+
+UUID=1234-abcd /mnt/archana xfs defaults,nofail 0 0
+Save File
+
+Press:
+
+CTRL + O
+
+Press Enter.
+
+Then:
+
+CTRL + X
+
+Done ✅
+
+STEP 11 — Test
+
+Type:
+
+sudo mount -a
+
+No error means success.
+
+STEP 12 — Reboot
+
+Type:
+
+sudo reboot
+
+Reconnect again.
+
+Type:
+
+df -h
+
+If mount still exists → permanent mounting successful ✅
+
+EXPERIMENT 3
+Snapshot + Copy to Another Region
+STEP 1 — Create Snapshot
+
+Go to:
+
+EC2 → Volumes
+
+Select volume.
+
+Top click:
+
+Actions
+
+Click:
+
+Create Snapshot
+
+(Page 22-23 images)
+
+STEP 2 — Enter Snapshot Details
+
+Give:
+
+Name
+Description
+
+Click orange button:
+
+Create Snapshot
+STEP 3 — Copy Snapshot to Another Region
+
+Go left menu:
+
+Snapshots
+
+Select snapshot.
+
+Top click:
+
+Actions
+
+Click:
+
+Copy Snapshot
+
+(Page 24-25 shows exact buttons)
+
+STEP 4 — Choose Destination Region
+
+Top dropdown asks region.
+
+Example:
+
+Mumbai
+
+or
+
+Ohio
+
+Click:
+
+Copy Snapshot
+
+Wait until status becomes:
+
+Completed
+STEP 5 — Switch Region
+
+Top right corner AWS region dropdown.
+
+Change to destination region.
+
+Example:
+
+N. Virginia → Mumbai
+STEP 6 — Create Volume from Snapshot
+
+Go:
+
+Snapshots
+
+Select copied snapshot.
+
+Top click:
+
+Actions
+
+Then:
+
+Create Volume
+STEP 7 — Attach to New EC2
+
+Go:
+
+Volumes
+
+Select new volume.
+
+Click:
+
+Actions → Attach Volume
+
+Choose instance.
+
+Click:
+
+Attach
+
+Done ✅
