@@ -1,0 +1,844 @@
+WEEK 1
+Creation of Amazon EC2 Instances (Linux and Windows) and Establishing Secure
+Connections Using SSH from Local Machine, PuTTY (.pem & .ppk), AWS CloudShell, and
+Remote Desktop Protocol (RDP)
+
+# Procedure
+
+## 1. Create Linux EC2 Instance
+1. Login to AWS Console → EC2 → Launch Instance.
+2. Select Ubuntu AMI and choose instance type (t2.micro).
+3. Create/select key pair (.pem).
+4. Configure Security Group:
+   * SSH Port: 22
+   * Source: My IP
+5. Launch the instance. 
+---
+## 2. Connect Using PuTTY
+1. Convert `.pem` file to `.ppk` using PuTTYgen.
+2. Open PuTTY and enter Public DNS/IP.
+3. Go to Connection → SSH → Auth → Credentials.
+4. Browse and select `.ppk` file.
+5. Click Open and login to Ubuntu EC2 instance. 
+---
+## 3. Connect Using AWS CloudShell
+
+1. Open AWS CloudShell.
+2. Upload `.pem` key file.
+3. Copy SSH command from EC2 Connect page.
+4. Run:
+
+   ```bash
+   ssh -i key.pem ubuntu@public-dns
+   ```
+5. Connection to EC2 instance is established. 
+
+---
+
+## 4. Create Windows EC2 Instance and Connect via RDP
+
+1. Launch Windows Server EC2 instance.
+2. Allow RDP Port 3389 in Security Group.
+3. Get Administrator password using `.pem` file.
+4. Open Remote Desktop Connection (mstsc).
+5. Enter Public IP, username as Administrator, and decrypted password.
+6. Click Connect to access Windows EC2 instance. 
+
+---
+
+## Result
+
+Successfully created Linux and Windows EC2 instances and connected securely using SSH, PuTTY, AWS CloudShell, and RDP.
+-------------------------------------------------------------------------------------------
+
+WEEK 2
+2.Attach and permanently mount an EBS volume to a Linux EC2 instance to
+ensure data persistence across reboots.
+
+# Procedure
+
+## 1. Create and Attach EBS Volume
+
+1. Login to AWS Console → EC2 → Volumes → Create Volume.
+2. Select volume type (gp3), size (20 GB), and same Availability Zone as EC2.
+3. Attach the volume to the Linux EC2 instance using device name `/dev/xvdf`. 
+
+---
+
+## 2. Verify and Partition the Volume
+
+1. Connect to EC2 using SSH:
+
+   ```bash
+   ssh -i key.pem ec2-user@<public-ip>
+   ```
+2. Verify the attached disk:
+
+   ```bash
+   lsblk
+   ```
+3. Create partition on the new disk:
+
+   ```bash
+   fdisk /dev/nvme1n1
+   ```
+4. Save changes and run:
+
+   ```bash
+   partprobe
+   ```
+
+
+
+---
+
+## 3. Format and Mount the Volume
+
+1. Format the partition:
+
+   ```bash
+   mkfs.xfs /dev/nvme1n1p1
+   ```
+2. Create mount directory:
+
+   ```bash
+   mkdir /mnt/archana
+   ```
+3. Mount the volume:
+
+   ```bash
+   mount /dev/nvme1n1p1 /mnt/archana
+   ```
+4. Verify using:
+
+   ```bash
+   df -h
+   ```
+
+
+
+---
+
+## 4. Make the Mount Permanent
+
+1. Get UUID of the partition:
+
+   ```bash
+   blkid
+   ```
+2. Add UUID entry in `/etc/fstab`.
+3. Test using:
+
+   ```bash
+   mount -a
+   ```
+4. Reboot the instance and verify automatic mounting using:
+
+   ```bash
+   df -h
+   ```
+---
+3. Create a snapshot of the attached EBS volume and use it to create and attach
+a new volume to an EC2 instance in another AWS region.
+# Procedure
+
+## 1. Create EBS Snapshot
+
+1. Login to AWS Console → EC2 Dashboard → Volumes.
+2. Select the required EBS volume.
+3. Click Actions → Create Snapshot.
+4. Enter snapshot name and description.
+5. Click Create Snapshot. 
+
+---
+
+## 2. Copy Snapshot to Another Region
+
+1. Go to EC2 → Snapshots.
+2. Select the created snapshot.
+3. Click Actions → Copy Snapshot.
+4. Choose the destination AWS region.
+5. Start the snapshot copy process and wait until status becomes completed. 
+
+---
+
+## 3. Create Volume from Snapshot
+
+1. Switch to the destination region.
+2. Open Snapshots section and select the copied snapshot.
+3. Click Actions → Create Volume.
+4. Configure volume size, type, and Availability Zone.
+5. Click Create Volume. 
+
+---
+
+## 4. Attach Volume to EC2 Instance
+
+1. Go to EC2 → Volumes.
+2. Select the newly created volume.
+3. Click Actions → Attach Volume.
+4. Select the target EC2 instance and device name.
+5. Click Attach to complete the process. 
+
+-------------------------------------
+
+WEEK 3
+Elastic File Storage
+# Procedure
+
+## 1. Launch EC2 Instances
+
+1. Login to AWS Console → EC2 → Launch Instance.
+2. Create two Amazon Linux instances named EFS-1 and EFS-2.
+3. Select instance type t2.micro.
+4. Configure security group and allow NFS access.
+5. Launch both instances in different subnets. 
+
+---
+
+## 2. Create EFS File System
+
+1. Open AWS EFS service → Create File System.
+2. Select VPC and network settings.
+3. Attach the NFS security group.
+4. Review and create the EFS file system. 
+
+---
+
+## 3. Configure EC2 Instances
+
+1. Connect to both EC2 instances using SSH.
+2. Switch to root user:
+
+   ```bash
+   sudo su
+   ```
+3. Create directory:
+
+   ```bash
+   mkdir efs
+   ```
+4. Install EFS utilities:
+
+   ```bash
+   yum install -y amazon-efs-utils
+   ```
+
+
+
+---
+
+## 4. Attach and Verify EFS
+
+1. Go to EFS → Attach → Mount via DNS.
+2. Copy and execute the mount command on both EC2 instances.
+3. Create a file in one instance and verify it appears in the other instance automatically. 
+
+## Result
+Successfully created and attached Amazon EFS to multiple EC2 instances and verified shared file access.
+-----------------------------------------------------
+WEEK - 4
+Simple Storage Service (S3)
+# Procedure
+
+## 1. Create an S3 Bucket and Upload Object
+
+1. Login to AWS Management Console and open the S3 service.
+2. Click Create Bucket and enter bucket name and region.
+3. Disable Block Public Access settings and acknowledge the warning.
+4. Create the bucket successfully.
+5. Open the bucket and upload an object/file.
+6. Enable public read access at both bucket level and object level using ACL permissions.
+7. Verify public access by opening the object URL in the browser. 
+
+---
+
+## 2. Enable Versioning and Cross-Region Replication
+
+1. Open the source S3 bucket and go to Properties.
+2. Enable Bucket Versioning.
+3. Upload the same file multiple times and observe different versions.
+4. Create another S3 bucket in a different AWS region.
+5. Enable versioning on the destination bucket.
+6. Go to Management → Replication Rules → Create Replication Rule.
+7. Select destination bucket and enable replication for all objects.
+8. Upload a new object to the source bucket and verify automatic replication in the destination bucket. 
+
+---
+
+## 3. Configure Static Website Hosting
+
+1. Upload `index.html` and `error.html` files into the S3 bucket.
+2. Go to Properties → Static Website Hosting → Enable.
+3. Specify:
+
+   * Index document: `index.html`
+   * Error document: `error.html`
+4. Enable public read access for the bucket and uploaded files using ACL permissions.
+5. Copy the website endpoint URL and open it in the browser.
+6. Verify that the static website loads successfully and displays the error page for invalid URLs. 
+
+## Result
+Successfully created an S3 bucket, enabled versioning and cross-region replication, uploaded objects with public access, and hosted a static website using Amazon S3.
+------------------------------------------------------------------------------
+Week 5
+VPC Creation and Ec2 Instance Connection
+
+# Procedure
+
+## 1. Create VPC and Subnets
+
+1. Login to AWS Console → VPC → Create VPC.
+2. Enter VPC name and CIDR block `10.0.0.0/16`.
+3. Create Public and Private subnets with different CIDR ranges.
+4. Select the same Availability Zone for both subnets.
+
+---
+
+## 2. Configure Internet Gateway and Route Tables
+
+1. Create an Internet Gateway and attach it to the VPC.
+2. Create a Public Route Table and add route `0.0.0.0/0` to Internet Gateway.
+3. Associate the Public Route Table with the Public Subnet.
+4. Create a Private Route Table and associate it with the Private Subnet.
+
+---
+
+## 3. Configure Security and Launch EC2
+
+1. Enable Auto-Assign Public IP for the Public Subnet.
+2. Create Security Group and allow SSH, HTTP, and HTTPS access.
+3. Launch one EC2 instance in Public Subnet and another in Private Subnet.
+4. Attach the required security groups to the instances.
+
+---
+
+## 4. Verify Connectivity
+
+1. Check internet access for the Public EC2 instance.
+2. Verify that the Private EC2 instance has restricted public access.
+3. Test connectivity between instances inside the VPC.
+
+## Result
+Successfully created a VPC with public and private subnets and connected EC2 instances securely.
+-----------------------------------------------
+WEEK 6
+VPC USING BASTION SERVER
+# Procedure
+
+## 1. Create VPC and Subnets
+
+1. Create a VPC with CIDR `10.0.0.0/16`.
+2. Create:
+
+   * Public Subnet: `10.0.1.0/24`
+   * Private Subnet: `10.0.2.0/24`
+3. Configure route tables and attach Internet Gateway for public subnet.
+
+---
+
+## 2. Configure Security Groups
+
+1. Bastion Server Security Group:
+
+   * Allow SSH (22) from My IP.
+2. Database Server Security Group:
+
+   * Allow MySQL (3306) from Public Subnet.
+   * Allow SSH (22) only from Bastion Server private IP.
+3. Disable direct public access to Database Server.
+
+---
+
+## 3. Launch EC2 Instances
+
+1. Launch Bastion Server in Public Subnet using Ubuntu AMI.
+2. Launch Database Server in Private Subnet using Ubuntu AMI.
+3. Attach required key pairs and security groups.
+
+---
+
+## 4. Connect Through Bastion Server
+
+1. Copy DB server key to Bastion Server using SCP:
+
+   ```bash
+   scp -i bastion.pem dbserver.pem ubuntu@<BASTION_PUBLIC_IP>:/home/ubuntu/
+   ```
+2. Connect to Bastion Server:
+
+   ```bash
+   ssh -i bastion.pem ubuntu@<BASTION_PUBLIC_IP>
+   ```
+3. From Bastion Server, connect to Database Server:
+
+   ```bash
+   ssh -i dbserver.pem ubuntu@10.0.2.x
+   ```
+
+---
+
+## 5. Configure NAT Gateway
+
+1. Create NAT Gateway in the public subnet.
+2. Create a route table for private subnet.
+3. Add route:
+
+   * Destination: `0.0.0.0/0`
+   * Target: NAT Gateway
+4. Associate the route table with the private subnet.
+5. Verify internet access from the private EC2 instance.
+
+## Result
+Successfully created a VPC using Bastion Server and NAT Gateway to securely access private subnet EC2 instances and provide internet connectivity.
+-----------------------------------------------
+
+WEEK-7:
+step-by-step procedure for setting up an AWS Lambda function to
+trigger whenever an object is uploaded to an S3 bucket and update a
+DynamoDB table: 
+
+# Procedure
+
+## 1. Create S3 Bucket and DynamoDB Table
+
+1. Login to AWS Console → S3 → Create Bucket.
+2. Enter bucket name and enable versioning.
+3. Create the bucket successfully.
+4. Open DynamoDB → Create Table.
+5. Enter table name and create a primary key of type String.
+
+---
+
+## 2. Create AWS Lambda Function
+
+1. Open AWS Lambda → Create Function.
+2. Select Author from Scratch.
+3. Enter function name and choose Python runtime.
+4. Select existing IAM role or create a new role with basic Lambda permissions.
+5. Click Create Function.
+
+---
+
+## 3. Add S3 Trigger to Lambda
+
+1. Open the created Lambda function.
+2. Click Add Trigger.
+3. Select S3 service.
+4. Choose the created S3 bucket.
+5. Select event type as “All Object Create Events”.
+6. Add the trigger successfully.
+
+---
+
+## 4. Add Lambda Deployment Code
+
+1. Write Python code to trigger when objects are uploaded to S3.
+2. Use boto3 library to insert object details into DynamoDB table.
+3. Deploy and save the Lambda function code.
+
+---
+
+## 5. Configure IAM Permissions
+
+1. Open IAM Console → Roles.
+2. Select the Lambda execution role.
+3. Add inline policy with DynamoDB `PutItem` permission.
+4. Save the policy and attach it to the role.
+
+---
+
+## 6. Test and Monitor the Setup
+
+1. Upload files into the S3 bucket.
+2. Verify uploaded object details in DynamoDB table.
+3. Open Lambda → Monitor → View CloudWatch Logs.
+4. Check logs and execution details successfully.
+## Result
+Successfully created an AWS Lambda function that triggers on S3 object upload and stores object details in DynamoDB with monitoring through CloudWatch.
+-----------------------------------------------
+
+WEEK-8-
+SNS,SQS & S3-SNS-SQS-LAMBDA SERVICES
+
+# Procedure
+
+## 1. Create SNS Topic and Email Subscription
+
+1. Login to AWS Console → SNS → Topics → Create Topic.
+2. Select Standard type and enter topic name.
+3. Create an Email Subscription by providing email address.
+4. Confirm the subscription from the received email.
+5. Publish a test message and verify email notification. 
+
+---
+
+## 2. Create S3 Bucket and Configure Notifications
+
+1. Open Amazon S3 → Create Bucket.
+2. Enter bucket name and select region.
+3. Open the bucket → Properties → Event Notifications.
+4. Create an event notification for “All Object Create Events”.
+5. Select SNS Topic as destination and save changes. 
+
+---
+
+## 3. Create SQS Queue and Subscribe to SNS
+
+1. Open Amazon SQS → Create Queue.
+2. Select Standard Queue and enter queue name.
+3. Open SNS Topic → Create Subscription.
+4. Select protocol as Amazon SQS and choose the queue.
+5. Add required access policies for SNS and SQS communication. 
+
+---
+
+## 4. Configure Lambda Function
+
+1. Open AWS Lambda → Create Function.
+2. Choose Author from Scratch and select Python runtime.
+3. Add SQS Queue as Lambda Trigger.
+4. Write Lambda code to process SQS messages.
+5. Deploy the Lambda function successfully. 
+
+---
+
+## 5. Test the Architecture
+
+1. Upload a file into the S3 bucket.
+2. Verify:
+
+   * S3 sends notification to SNS.
+   * SNS forwards message to SQS.
+   * Lambda reads and processes the message from SQS.
+3. Check CloudWatch logs for execution details. 
+
+## Result
+Successfully created an event-driven architecture using Amazon S3, SNS, SQS, and AWS Lambda for automatic message processing.
+----------------------------------------
+
+WEEK-9
+Implementation of Elastic Load Balancer with Auto Scaling using AWS EC2
+Instances.
+
+# Procedure
+
+## 1. Launch EC2 Instances and Configure Web Server
+
+1. Login to AWS Console → EC2 → Launch Instance.
+2. Create two EC2 instances using Amazon Linux AMI.
+3. Configure Security Group:
+
+   * SSH (22) from My IP
+   * HTTP (80) from Anywhere
+4. Install Apache Web Server:
+
+   ```bash
+   yum update -y
+   yum install httpd -y
+   systemctl start httpd
+   systemctl enable httpd
+   ```
+5. Create sample web pages for both servers. 
+
+---
+
+## 2. Create Application Load Balancer (ALB)
+
+1. Go to EC2 → Load Balancers → Create Load Balancer.
+2. Select Application Load Balancer.
+3. Configure:
+
+   * Internet-facing
+   * HTTP Listener (Port 80)
+4. Select VPC and subnets.
+5. Create Target Group and register both EC2 instances.
+6. Create the Load Balancer successfully. 
+
+---
+
+## 3. Verify Load Balancer
+
+1. Copy the ALB DNS Name.
+2. Open it in browser.
+3. Refresh multiple times to verify traffic distribution between both EC2 instances.
+4. Check Target Group health status as Healthy. 
+
+---
+
+## 4. Create Auto Scaling Group
+
+1. Create AMI from configured EC2 instance.
+2. Create Launch Template using the AMI.
+3. Open Auto Scaling Groups → Create Auto Scaling Group.
+4. Attach Launch Template and existing Load Balancer.
+5. Configure:
+
+   * Desired Capacity: 2
+   * Minimum Capacity: 1
+   * Maximum Capacity: 4
+6. Create the Auto Scaling Group. 
+
+---
+
+## 5. Test Auto Scaling
+
+1. Terminate one EC2 instance manually.
+2. Verify Auto Scaling automatically launches a new instance.
+3. Confirm Load Balancer distributes traffic to active instances automatically. 
+
+## Result
+Successfully implemented Elastic Load Balancer with Auto Scaling using AWS EC2 instances for high availability and automatic scaling.
+---------------------------------------------------------------
+
+WEEK 10
+ELASTIC BEAN STALK
+
+# Procedure
+
+## 1. Create Elastic Beanstalk Application
+
+1. Login to AWS Console → Search Elastic Beanstalk.
+2. Click Create Application.
+3. Enter Application Name and description.
+4. Click Create.
+
+---
+
+## 2. Create Environment
+
+1. Click Create Environment.
+2. Select Web Server Environment.
+3. Choose platform such as Java, Python, or Node.js.
+4. Upload application code (.war or .zip file).
+
+---
+
+## 3. Configure Service and Network
+
+1. Select existing Service Role and EC2 Instance Profile.
+2. Choose VPC and Subnets.
+3. Enable Public IP for internet access.
+4. Select EC2 instance type such as t2.micro.
+
+---
+
+## 4. Configure Scaling and Deploy
+
+1. Set minimum and maximum instance count.
+2. Enable Load Balancer if required.
+3. Review all configurations.
+4. Click Create to deploy the application.
+
+---
+
+## 5. Access and Update Application
+
+1. After deployment, copy the generated application URL.
+2. Open the URL in browser to access the application.
+3. To update the application, use Upload and Deploy option with new application version.
+
+## Result
+Successfully deployed and managed a web application using AWS Elastic Beanstalk with automatic scaling and load balancing.
+-------------------------------------------------------------------------------
+
+WEEK 11
+Amazon LEX
+
+# Procedure
+
+## 1. Create Amazon Lex Bot
+
+1. Login to AWS Console → Search Amazon Lex.
+2. Click Create Bot and choose Create a Blank Bot.
+3. Enter bot name such as `HotelBookingBot`.
+4. Create IAM role and select language as English.
+5. Click Done to create the bot.
+
+---
+
+## 2. Create Intent and Utterances
+
+1. Go to Intents → Create Intent.
+2. Enter intent name as `BookHotel`.
+3. Add sample utterances:
+
+   * Book a hotel
+   * Reserve room
+   * I need a room
+4. Save the intent.
+
+---
+
+## 3. Add Slots and Conditional Logic
+
+1. Add slots to collect user information:
+
+   * age → AMAZON.Number
+   * location → AMAZON.City
+   * checkin → AMAZON.Date
+   * nights → AMAZON.Number
+2. Add prompts for each slot.
+3. Configure conditional branching:
+
+   * If `{age} < 18`
+   * Response: “You are not eligible for hotel booking.”
+
+---
+
+## 4. Create Custom Slot Type and Response Cards
+
+1. Go to Slot Types → Create Custom Slot Type.
+2. Create `RoomType` with values:
+
+   * Single
+   * Double
+   * Suite
+3. Add response cards with buttons for room selection.
+
+---
+
+## 5. Build and Test Chatbot
+
+1. Configure welcome and confirmation responses.
+2. Click Build to train the bot.
+3. Open Test Chatbot panel.
+4. Enter sample inputs such as:
+
+   * “Book a hotel”
+5. Verify chatbot responses and booking confirmation.
+
+## Result
+Successfully created and tested an Amazon Lex chatbot for hotel booking using intents, slots, conditional logic, and response cards.
+---------------------------------------------------------------------------------------------------
+
+WEEK-12
+ IAM
+
+# Procedure
+
+## 1. Create IAM User and Assign Permissions
+
+1. Login to AWS Console as Root User.
+2. Open IAM Service → Users → Create User.
+3. Enter username and enable AWS Management Console access.
+4. Attach policy `AmazonS3FullAccess`.
+5. Create the user and download the `.csv` credentials file.
+
+---
+
+## 2. Login as IAM User and Verify Access
+
+1. Sign out from Root account.
+2. Login using IAM User credentials and Account ID.
+3. Open EC2 service and verify Access Denied error.
+4. Open S3 service and create a bucket successfully.
+
+---
+
+## 3. Configure AWS CLI
+
+1. Generate Access Key and Secret Key from IAM User Security Credentials.
+2. Install AWS CLI on the local system.
+3. Open Command Prompt and run:
+
+   ```bash
+   aws configure
+   ```
+4. Enter:
+
+   * Access Key ID
+   * Secret Access Key
+   * Region
+   * Output format
+
+---
+
+## 4. Verify CLI Access
+
+1. Run command:
+
+   ```bash
+   aws ec2 describe-instances
+   ```
+
+   Access will be denied due to IAM restrictions.
+2. Run:
+
+   ```bash
+   aws s3 ls
+   ```
+
+   S3 buckets will be listed successfully.
+3. Create bucket using:
+
+   ```bash
+   aws s3 mb s3://bucket-name
+   ```
+---
+## Result
+Successfully created IAM user with restricted permissions and verified AWS Console and CLI access using IAM policies.
+
+---------------------------------------------------------------------------------------------------------
+
+Week-13 
+IAM Roles
+
+# Procedure
+
+## 1. Create IAM Role
+
+1. Login to AWS Console → IAM → Roles → Create Role.
+2. Select trusted entity as AWS Service.
+3. Choose EC2 as the use case.
+4. Attach permission policy `AmazonS3FullAccess`.
+5. Enter role name and create the IAM role.
+
+---
+
+## 2. Launch and Configure EC2 Instance
+
+1. Create and launch an EC2 instance.
+2. Connect to the EC2 instance using SSH.
+3. Verify AWS CLI command:
+
+   ```bash
+   aws ec2 describe-instances
+   ```
+
+---
+
+## 3. Attach IAM Role to EC2 Instance
+
+1. Go to EC2 Dashboard and select the running instance.
+2. Click Actions → Security → Modify IAM Role.
+3. Select the created IAM role.
+4. Click Update IAM Role.
+
+---
+
+## 4. Verify Role Permissions
+
+1. Connect to the EC2 instance.
+2. Run:
+
+   ```bash
+   aws s3 ls
+   ```
+
+   S3 buckets will be listed successfully.
+3. Run:
+
+   ```bash
+   aws ec2 describe-instances
+   ```
+
+   Access will be denied because the role has only S3 permissions.
+
+---
+
+## Result
+
+Successfully created and attached an IAM Role to an EC2 instance and verified temporary security credentials with restricted access permissions.
+----------------------------------------------------------------------------------------------------------------
+==========================================================================================================================================================================================================================================
