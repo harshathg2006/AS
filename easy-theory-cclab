@@ -1,0 +1,432 @@
+WEEK 1 – EC2 Instance Creation and Connection
+
+
+Login to AWS Console and open Amazon EC2.
+
+
+Click Launch Instance and enter instance name.
+
+
+Select Ubuntu or Windows AMI and choose t2.micro.
+
+
+Create and download key pair file (.pem).
+
+
+Configure Security Group and allow SSH or RDP access.
+
+
+Launch the EC2 instance successfully.
+
+
+Connect to Linux instance using SSH, PuTTY, or CloudShell.
+
+
+Connect to Windows instance using Remote Desktop Protocol (RDP).
+
+
+Result
+Successfully created and connected Linux and Windows EC2 instances.
+
+******************************************************
+
+
+WEEK 2 – EBS Volume and Snapshot
+
+
+Open EC2 Dashboard and create a new EBS volume.
+
+
+Select same Availability Zone as EC2 instance.
+
+
+Attach the EBS volume to Linux EC2 instance.
+
+
+Connect to EC2 using SSH and verify disk using lsblk.
+
+
+Create partition, format, and mount the volume.
+
+
+Add UUID entry in /etc/fstab for permanent mounting.
+
+
+Create snapshot of the attached EBS volume.
+
+
+Copy snapshot to another region and create a new volume from it.
+
+
+Result
+Successfully attached EBS volume permanently and created snapshot backup.
+
+***************************
+***************************
+
+
+WEEK 3 – Elastic File System (EFS)
+
+
+Launch two EC2 instances in AWS.
+
+
+Open Amazon EFS and create file system.
+
+
+Configure VPC and security groups for EFS access.
+
+
+Connect to both EC2 instances using SSH.
+
+
+Install EFS utilities in both instances.
+
+
+Create mount directory for EFS.
+
+
+Mount EFS file system using DNS mount command.
+
+
+Verify shared file access between both EC2 instances.
+
+
+Result
+Successfully attached EFS and shared files between EC2 instances.
+
+******************************************************
+
+
+
+WEEK 4 – Simple Storage Service (S3)
+
+
+Open Amazon S3 and create bucket.
+
+
+Enter bucket name and select region.
+
+
+Upload files into the S3 bucket.
+
+
+Enable public access permissions for uploaded objects.
+
+
+Enable bucket versioning in Properties section.
+
+
+Create another bucket in different AWS region.
+
+
+Configure cross-region replication between buckets.
+
+
+Enable static website hosting using index.html and error.html.
+
+
+Result
+Successfully created S3 bucket with versioning, replication, and static website hosting.
+
+***************************
+***************************
+
+
+WEEK 5 – VPC Creation
+
+
+Open Amazon VPC and create VPC.
+
+
+Enter CIDR block 10.0.0.0/16.
+
+
+Create Public and Private subnets.
+
+
+Create and attach Internet Gateway to VPC.
+
+
+Create Route Tables for public and private subnets.
+
+
+Associate Public Route Table with Public Subnet.
+
+
+Launch EC2 instances in both subnets.
+
+
+Verify internet access and connectivity inside VPC.
+
+
+Result
+Successfully created VPC with public and private subnets.
+
+***************************
+***************************
+
+
+WEEK 6 – VPC Using Bastion Server
+
+
+Create VPC with public and private subnets.
+
+
+Launch Bastion Server in Public Subnet.
+
+
+Launch Database Server in Private Subnet.
+
+
+Configure security groups for SSH access.
+
+
+Connect to Bastion Server using SSH.
+
+
+Access private EC2 instance through Bastion Server.
+
+
+Create and configure NAT Gateway for internet access.
+
+
+Verify private instance internet connectivity.
+
+
+Result
+Successfully accessed private EC2 instance using Bastion Server.
+
+***************************
+***************************
+
+
+WEEK 7 – Lambda with S3 and DynamoDB
+
+
+Create S3 bucket in AWS.
+
+
+Create DynamoDB table with primary key.
+
+
+Open AWS Lambda and create function.
+
+
+Select Python runtime environment.
+
+
+Add S3 bucket as Lambda trigger.
+
+
+Write Lambda code using boto3 library.
+
+
+Configure IAM permissions for DynamoDB access.
+
+
+Upload file to S3 and verify DynamoDB update.
+
+
+Result
+Successfully triggered Lambda function from S3 upload event.
+
+***************************
+***************************
+
+
+WEEK 8 – SNS, SQS and Lambda
+
+
+Create SNS Topic and email subscription.
+
+
+Confirm email subscription notification.
+
+
+Create S3 bucket and configure event notification.
+
+
+Connect S3 notifications to SNS Topic.
+
+
+Create SQS Queue in AWS.
+
+
+Subscribe SQS Queue to SNS Topic.
+
+
+Create Lambda function with SQS trigger.
+
+
+Upload file in S3 and verify complete workflow.
+
+
+Result
+Successfully created S3-SNS-SQS-Lambda architecture.
+
+***************************
+***************************
+
+
+WEEK 9 – Load Balancer and Auto Scaling
+
+
+Launch two EC2 instances in AWS.
+
+
+Install Apache web server in both instances.
+
+
+Create Application Load Balancer (ALB).
+
+
+Create Target Group and register EC2 instances.
+
+
+Verify traffic distribution using ALB DNS name.
+
+
+Create Launch Template from EC2 instance.
+
+
+Create Auto Scaling Group with minimum and maximum capacity.
+
+
+Terminate one instance and verify automatic replacement.
+
+
+Result
+Successfully implemented Load Balancer with Auto Scaling.
+
+***************************
+***************************
+
+
+WEEK 10 – Elastic Beanstalk
+
+
+Open AWS Elastic Beanstalk.
+
+
+Create new Elastic Beanstalk application.
+
+
+Select Web Server Environment.
+
+
+Choose platform such as Java or Python.
+
+
+Upload application ZIP or WAR file.
+
+
+Configure VPC, subnet, and EC2 settings.
+
+
+Deploy the application environment.
+
+
+Open generated URL and verify application.
+
+
+Result
+Successfully deployed application using Elastic Beanstalk.
+
+***************************
+***************************
+
+
+WEEK 11 – Amazon Lex
+
+
+Open Amazon Lex and create bot.
+
+
+Enter bot name and language settings.
+
+
+Create intent for hotel booking.
+
+
+Add sample user utterances.
+
+
+Add slots like age, location, and date.
+
+
+Configure prompts and conditional logic.
+
+
+Build and train the chatbot.
+
+
+Test chatbot using sample messages.
+
+
+Result
+Successfully created and tested Amazon Lex chatbot.
+
+***************************
+***************************
+
+
+WEEK 12 – IAM
+
+
+Open AWS Identity and Access Management.
+
+
+Create new IAM user with console access.
+
+
+Attach AmazonS3FullAccess policy.
+
+
+Download IAM user credentials.
+
+
+Login using IAM user account.
+
+
+Verify restricted access to EC2 service.
+
+
+Install and configure AWS CLI using aws configure.
+
+
+Verify S3 access using AWS CLI commands.
+
+
+Result
+Successfully created IAM user and verified access permissions.
+
+***************************
+***************************
+
+
+WEEK 13 – IAM Roles
+
+
+Open IAM Console and create new IAM Role.
+
+
+Select trusted entity as EC2 service.
+
+
+Attach AmazonS3FullAccess policy.
+
+
+Create IAM Role successfully.
+
+
+Launch EC2 instance in AWS.
+
+
+Attach IAM Role to EC2 instance.
+
+
+Connect to EC2 instance using SSH.
+
+
+Verify S3 access without using access keys
