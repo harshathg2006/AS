@@ -1,0 +1,571 @@
+PART 1 — LOGIN TO AWS
+Step 1: Open AWS Console
+Open Chrome
+Search:
+AWS Console
+Login with your AWS account
+
+After login, you will see:
+
+Search bar at top
+AWS services
+PART 2 — CREATE UBUNTU LINUX EC2 INSTANCE
+Step 2: Open EC2 Service
+Where is EC2 button?
+
+At top search bar type:
+
+EC2
+
+Click:
+
+🟧 EC2
+Step 3: Launch Instance
+
+After opening EC2:
+
+Left side menu:
+
+Click:
+
+Instances
+
+Now click orange button:
+
+Launch Instances
+
+(Top right side)
+
+PART 3 — CONFIGURE UBUNTU INSTANCE
+Step 4: Give Instance Name
+
+You will see:
+
+Name and tags
+
+Inside Name box type:
+
+UbuntuServer
+Step 5: Choose Operating System
+
+Scroll little down.
+
+You will see:
+
+Application and OS Images (AMI)
+
+Select:
+
+✅ Ubuntu
+
+Step 6: Choose Instance Type
+
+Scroll little down.
+
+You will see:
+
+Instance Type
+
+Choose:
+
+t2.micro
+
+(Free tier)
+
+PART 4 — CREATE KEY PAIR
+Step 7: Create Key Pair
+
+Scroll down.
+
+You will see:
+
+Key pair (login)
+
+Click:
+
+Create new key pair
+
+A popup opens.
+
+Fill details:
+Key pair name:
+mykey
+Key pair type:
+
+Keep default
+
+Private key file format:
+
+Choose:
+
+.pem
+
+Click:
+
+Create key pair
+
+IMPORTANT:
+File downloads automatically.
+
+Example:
+
+mykey.pem
+
+Keep this safely.
+
+PART 5 — NETWORK SETTINGS
+Step 8: Allow SSH
+
+Scroll down.
+
+You will see:
+
+Network settings
+
+Click:
+
+Edit
+
+Ensure this checkbox is selected:
+
+✅ Allow SSH traffic from
+
+Choose:
+
+My IP
+
+SSH means Linux connection.
+
+Port used:
+
+22
+PART 6 — LAUNCH INSTANCE
+Step 9: Launch
+
+Now click orange button:
+
+Launch Instance
+
+(Right side)
+
+Wait 1 minute.
+
+You will see:
+
+✅ Successfully launched
+
+PART 7 — CONNECT USING PuTTY
+
+(Windows users)
+
+STEP A — INSTALL PuTTY
+
+Open browser.
+
+Search:
+
+PuTTY download
+
+Open:
+
+PuTTY Official Website
+
+Download:
+
+PuTTY
+PuTTYgen
+
+Install both.
+
+STEP B — CONVERT .pem TO .ppk
+
+PuTTY does NOT use .pem directly.
+
+We convert:
+
+.pem → .ppk
+Step 1: Open PuTTYgen
+
+Press Windows key.
+
+Search:
+
+PuTTYgen
+
+Open it.
+
+Step 2: Load PEM File
+
+Inside PuTTYgen:
+
+Click:
+
+Load
+
+Bottom right change:
+
+All Files (*.*)
+
+Select:
+
+mykey.pem
+
+Click:
+
+Open
+Step 3: Save PPK File
+
+Click:
+
+Save private key
+
+Save as:
+
+mykey.ppk
+
+Done.
+
+PART 8 — GET PUBLIC IP
+Step 1
+
+Go back to AWS EC2.
+
+Click:
+
+Instances
+
+Select your Ubuntu instance.
+
+Step 2
+
+Below, you will see:
+
+Public IPv4 address
+
+OR
+
+Public DNS
+
+Copy it.
+
+Example:
+
+3.110.xxx.xxx
+PART 9 — OPEN PuTTY
+Step 1: Open PuTTY
+
+Search:
+
+PuTTY
+
+Open it.
+
+You will see:
+
+PuTTY Configuration
+Step 2: Enter Host Name
+
+Inside:
+
+Host Name (or IP address)
+
+Type:
+
+ubuntu@YOUR_PUBLIC_IP
+
+Example:
+
+ubuntu@3.110.xxx.xxx
+PART 10 — ATTACH PPK FILE
+Step 1
+
+Left side menu:
+
+Click:
+
+Connection
+
+Then:
+
+SSH
+
+Then:
+
+Auth
+
+Then:
+
+Credentials
+Step 2
+
+You will see:
+
+Private key file for authentication
+
+Click:
+
+Browse
+
+Select:
+
+mykey.ppk
+
+Click:
+
+Open
+PART 11 — CONNECT TO UBUNTU
+
+Now click:
+
+Open
+
+(At bottom)
+
+First Time Security Popup
+
+A warning appears.
+
+Click:
+
+Yes
+SUCCESS
+
+Black terminal opens.
+
+You are now connected to Ubuntu Linux EC2. 🎉
+
+VERIFY CONNECTION
+
+Type:
+
+whoami
+
+Press ENTER.
+
+Output should be:
+
+ubuntu
+
+PART 12 — CONNECT USING AWS CLOUDSHELL
+Step 1
+
+Top right corner in AWS Console.
+
+Find terminal icon:
+
+>_
+
+This is:
+
+CloudShell
+
+Click it.
+
+Step 2
+
+Wait for terminal to open.
+
+Step 3
+
+Go to:
+
+EC2 → Instances
+
+Select Ubuntu instance.
+
+Click:
+
+Connect
+Step 4
+
+Open tab:
+
+SSH Client
+
+Copy SSH command.
+
+Looks like:
+
+ssh -i "mykey.pem" ubuntu@ec2-xx-xx.compute.amazonaws.com
+Step 5
+
+Paste into CloudShell.
+
+It FAILS first time because key file not uploaded.
+
+Step 6 — Upload PEM File
+
+In CloudShell top right:
+
+Click:
+
+Actions
+
+OR
+
++
+
+Click:
+
+Upload file
+
+Upload:
+
+mykey.pem
+Step 7
+
+Paste SSH command again.
+
+Press ENTER.
+
+Connected successfully. 🎉
+
+PART 13 — CREATE WINDOWS EC2 INSTANCE
+Step 1
+
+Go:
+
+EC2 → Launch Instance
+Step 2 — Name
+
+Type:
+
+WindowsServer
+Step 3 — Choose Windows
+
+Under:
+
+Application and OS Images
+
+Choose:
+
+✅ Windows
+
+Example:
+
+Windows Server 2022
+Step 4 — Instance Type
+
+Choose:
+
+t2.micro
+Step 5 — Key Pair
+
+Create/select key pair.
+
+Download .pem file.
+
+Step 6 — Allow RDP
+
+In:
+
+Network settings
+
+Ensure:
+
+✅ Allow RDP traffic
+
+Port:
+
+3389
+
+Source:
+
+My IP
+Step 7 — Launch
+
+Click:
+
+Launch Instance
+
+PART 14 — GET WINDOWS PASSWORD
+Step 1
+
+Go:
+
+EC2 → Instances
+
+Select Windows instance.
+
+Step 2
+
+Click:
+
+Connect
+Step 3
+
+Open tab:
+
+RDP Client
+Step 4
+
+Click:
+
+Get Password
+Step 5
+
+Click:
+
+Upload private key file
+
+Upload:
+
+mykey.pem
+Step 6
+
+Click:
+
+Decrypt Password
+
+You will see:
+
+Username
+Password
+
+Copy password.
+
+PART 15 — CONNECT USING RDP
+Step 1
+
+Press:
+
+Windows + R
+
+Type:
+
+mstsc
+
+Press ENTER.
+
+(Remote Desktop opens)
+
+Step 2
+
+In:
+
+Computer
+
+Paste:
+
+Public IP
+
+Click:
+
+Connect
+Step 3
+
+Login details:
+
+Username:
+Administrator
+Password:
+
+Paste decrypted password.
+
+Step 4
+
+Click:
+
+OK
+
+Windows desktop opens. 🎉
