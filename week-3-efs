@@ -1,0 +1,384 @@
+PART 1 — LOGIN TO AWS
+Step 1: Open AWS Console
+Open browser
+Go to:
+
+AWS Console
+
+Click:
+Sign In to Console
+Enter:
+Email
+Password
+PART 2 — CREATE FIRST EC2 INSTANCE (EFS-1)
+Step 2: Open EC2 Dashboard
+
+After login:
+
+At top search bar type:
+EC2
+Click:
+Amazon EC2
+Step 3: Launch Instance
+
+Inside EC2 dashboard:
+
+Left side menu → click:
+Instances
+Top right → click orange button:
+Launch instances
+PART 3 — CONFIGURE EFS-1 SERVER
+Step 4: Name Your Server
+
+You will see:
+
+"Name and tags"
+
+Inside Name box type:
+
+EFS-1
+Step 5: Choose Operating System
+
+Scroll slightly down.
+
+Under:
+
+Application and OS Images
+
+Choose:
+
+Amazon Linux
+
+(Usually already selected)
+
+Step 6: Select Instance Type
+
+Find:
+
+Instance type
+
+Select:
+
+t2.micro
+
+This is free tier eligible.
+
+Step 7: Create Key Pair
+
+This is VERY IMPORTANT.
+
+Find:
+
+Key pair (login)
+
+Click:
+
+Create new key pair
+
+A popup opens.
+
+Enter:
+Key pair name:
+EFS
+Choose:
+Key pair type:
+RSA
+Private key format:
+.pem
+
+Click:
+
+Create key pair
+
+File downloads automatically.
+
+⚠️ IMPORTANT:
+Save this .pem file carefully.
+
+PART 4 — NETWORK SETTINGS
+Step 8: Configure Network
+
+Find:
+
+Network settings
+
+Click:
+
+Edit
+Step 9: Create Security Group
+
+Choose:
+
+Create security group
+Security Group Name:
+EFS-SG
+Step 10: Add NFS Rule
+
+Scroll to:
+
+Inbound security group rules
+
+Click:
+
+Add security group rule
+New Rule:
+Type	Source
+NFS	Anywhere
+
+NFS automatically uses:
+
+Port 2049
+
+This is required for EFS.
+
+Step 11: Launch Instance
+
+Bottom right click:
+
+Launch instance
+
+Wait 1–2 minutes.
+
+You created:
+
+EFS-1
+PART 5 — CREATE SECOND INSTANCE (EFS-2)
+
+Repeat same steps again.
+
+Only change:
+
+Name:
+EFS-2
+
+Everything else same.
+
+Launch second instance.
+
+PART 6 — CREATE EFS STORAGE
+Step 12: Open EFS Service
+
+Top AWS search bar:
+
+EFS
+
+Click:
+
+Amazon Elastic File System
+Step 13: Create File System
+
+Click orange button:
+
+Create file system
+Step 14: Configure EFS
+Name:
+week_3_efs
+VPC:
+
+Choose:
+
+default
+File system type:
+
+Choose:
+
+Regional
+
+Then click:
+
+Customize
+
+or
+
+Next
+
+(depending on AWS UI)
+
+PART 7 — CONFIGURE EFS NETWORK
+Step 15: Configure Mount Targets
+
+You will see:
+
+Availability Zones
+Security groups
+IMPORTANT:
+
+Delete default security groups.
+
+Then select:
+
+EFS-SG
+
+(the same security group created earlier)
+
+Click:
+
+Next
+
+Then:
+
+Create file system
+
+Done.
+
+PART 8 — CONNECT TO EC2 INSTANCES
+
+Now we connect to servers.
+
+Step 16: Open EC2 Instances Page
+
+Go back to:
+
+EC2 Dashboard
+Instances
+
+You will see:
+
+EFS-1
+EFS-2
+Step 17: Copy Public IP
+
+Click:
+
+EFS-1
+
+Find:
+
+Public IPv4 address
+
+Copy it.
+
+Do same for:
+
+EFS-2
+PART 9 — CONNECT USING POWERSHELL / TERMINAL
+For Windows Users
+
+Open:
+
+PowerShell
+Step 18: Move to PEM File Folder
+
+Example:
+
+cd Downloads
+Step 19: Connect to EFS-1
+
+Type:
+
+ssh -i EFS.pem ec2-user@YOUR-IP
+
+Example:
+
+ssh -i EFS.pem ec2-user@13.233.xx.xx
+
+If asked:
+
+Are you sure?
+
+Type:
+
+yes
+PART 10 — INSTALL EFS UTILITIES
+Step 20: Become Root User
+
+Type:
+
+sudo su
+Step 21: Create Folder
+
+Type:
+
+mkdir efs
+Step 22: Install EFS Package
+
+Type:
+
+yum install -y amazon-efs-utils
+
+Wait until installation completes.
+
+Step 23: Repeat for EFS-2
+
+Open another PowerShell window.
+
+Repeat:
+
+SSH login
+sudo su
+mkdir efs
+install package
+
+for:
+
+EFS-2
+PART 11 — ATTACH EFS TO EC2
+Step 24: Open EFS File System
+
+Go to:
+
+EFS dashboard
+Click your EFS
+Step 25: Click Attach
+
+Top right click:
+
+Attach
+
+Popup opens.
+
+Step 26: Select Mount via DNS
+
+Choose:
+
+Mount via DNS
+
+You will see a command like:
+
+sudo mount -t efs fs-xxxxx:/ efs
+
+Copy it.
+
+Step 27: Run Command on BOTH Instances
+
+Paste command in:
+
+EFS-1 terminal
+EFS-2 terminal
+
+Press Enter.
+
+Now EFS storage is attached.
+
+PART 12 — TEST FILE SHARING
+Step 28: Go Into EFS Folder
+
+On BOTH terminals type:
+
+cd efs
+Step 29: Create File in EFS-1
+
+On EFS-1 type:
+
+touch hello.txt
+
+Check:
+
+ls
+
+You will see:
+
+hello.txt
+Step 30: Verify in EFS-2
+
+On EFS-2 type:
+
+ls
+
+You should ALSO see:
+
+hello.txt
+
+🎉 SUCCESS!
+
+Both EC2 servers are sharing same storage.
