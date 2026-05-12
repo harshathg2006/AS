@@ -1,0 +1,581 @@
+PART 1 — Create S3 Bucket + Upload File + Enable Public Access
+What is S3?
+
+Amazon S3 = Simple Storage Service.
+
+Think of it like:
+
+Google Drive inside AWS
+Bucket = Folder
+Object = File
+STEP 1 — Login to AWS
+Open:
+Browser → Chrome
+Go to:
+AWS Console
+
+Type in Google:
+
+AWS Console login
+
+OR open:
+
+https://console.aws.amazon.com
+Login using:
+AWS Academy account
+OR
+Personal AWS account
+STEP 2 — Open S3 Service
+
+After login:
+
+TOP SEARCH BAR
+
+At top of AWS page you will see:
+
+🔍 Search services
+
+Type:
+
+S3
+
+Click:
+
+S3
+
+You will now enter S3 Dashboard.
+
+STEP 3 — Create Bucket
+Find Orange Button
+
+Top right:
+🟧 Create bucket
+
+Click it.
+
+STEP 4 — Bucket Configuration
+
+Now you will see:
+
+Create bucket page
+1. Bucket Name
+
+Find:
+
+Bucket name
+
+Enter:
+
+my-public-bucket-12345
+
+⚠ Bucket name must be:
+
+unique
+lowercase only
+no spaces
+
+If error comes:
+change number at end.
+
+Example:
+
+my-public-bucket-harsha01
+2. AWS Region
+
+Find:
+
+AWS Region
+
+Select nearest region.
+
+Example:
+
+Asia Pacific (Mumbai)
+STEP 5 — Disable Public Access
+
+VERY IMPORTANT STEP.
+
+Scroll down slowly.
+
+You will see:
+
+Block Public Access settings
+
+By default all checkboxes are ON.
+
+Uncheck:
+
+☑ Block all public access
+
+When you uncheck:
+AWS shows warning.
+
+Tick acknowledgment
+
+☑ I acknowledge that the current settings might result in this bucket and the objects within becoming public.
+
+STEP 6 — Create Bucket
+
+Scroll completely down.
+
+Click:
+🟧 Create bucket
+
+✅ Bucket created.
+
+STEP 7 — Open Bucket
+
+You will now see bucket list.
+
+Click your bucket name.
+
+Example:
+
+my-public-bucket-12345
+STEP 8 — Upload File
+
+Inside bucket:
+You will see tabs:
+
+Objects
+Properties
+Permissions
+Metrics
+
+Stay in:
+
+Objects tab
+Upload File
+
+Click:
+🟧 Upload
+
+Add File
+
+Click:
+🟦 Add files
+
+Select:
+
+image
+pdf
+text file
+
+Example:
+
+virat.jpg
+
+After selecting:
+
+Click:
+🟧 Upload
+
+Wait few seconds.
+
+✅ File uploaded.
+
+STEP 9 — Enable Bucket Public Permission
+
+Now we make bucket public.
+
+Go to Permissions Tab
+
+Top tabs:
+Click:
+
+Permissions
+Scroll Down
+
+Find:
+
+Access Control List (ACL)
+
+Click:
+🟦 Edit
+
+Public Access
+
+Under:
+
+Everyone (public access)
+
+Tick:
+☑ Read
+
+AWS warning appears.
+
+Tick acknowledgment.
+
+Click:
+🟧 Save changes
+
+✅ Bucket public permission enabled.
+
+STEP 10 — Enable Object Public Permission
+
+Now object/file itself must become public.
+
+Go to Objects Tab
+
+Click uploaded file name.
+
+Example:
+
+virat.jpg
+Open Permissions
+
+Inside object:
+Click:
+
+Permissions tab
+Edit ACL
+
+Scroll down.
+
+Find:
+
+Access Control List (ACL)
+
+Click:
+🟦 Edit
+
+Enable Public Read
+
+Under:
+
+Everyone (public access)
+
+Tick:
+☑ Read
+
+Click:
+🟧 Save changes
+
+✅ File is now public.
+
+STEP 11 — Test File URL
+
+Inside object page:
+
+Top right:
+Copy:
+
+Object URL
+
+Looks like:
+
+https://my-public-bucket.s3.amazonaws.com/virat.jpg
+Open Incognito
+
+Open new incognito tab.
+
+Paste URL.
+
+If image/file opens:
+✅ Experiment successful.
+
+PART 2 — S3 Versioning
+
+Versioning means:
+Old file versions are saved automatically.
+
+STEP 1 — Open Bucket
+
+Go to:
+
+S3
+Your bucket
+STEP 2 — Properties Tab
+
+Top tabs:
+Click:
+
+Properties
+STEP 3 — Bucket Versioning
+
+Scroll down.
+
+Find:
+
+Bucket Versioning
+
+Click:
+🟦 Edit
+
+STEP 4 — Enable Versioning
+
+Select:
+🔘 Enable
+
+Click:
+🟧 Save changes
+
+✅ Versioning enabled.
+
+STEP 5 — Test Versioning
+
+Upload:
+
+report.pdf
+
+Again upload:
+another file with SAME NAME:
+
+report.pdf
+
+AWS now:
+
+keeps old version
+creates new version
+STEP 6 — View Versions
+
+Go:
+Objects tab
+
+Top area:
+☑ Show versions
+
+Enable it.
+
+Now you can see:
+
+old version
+new version
+STEP 7 — Delete Object
+
+Select object.
+
+Click:
+🗑 Delete
+
+Object disappears.
+
+BUT:
+older versions still exist.
+
+This is called:
+
+Delete Marker
+
+You can restore file later.
+
+PART 3 — Cross Region Replication (CRR)
+
+Meaning:
+Copy files automatically from one region to another region.
+
+Example:
+
+Source → Mumbai
+Destination → Ohio
+IMPORTANT REQUIREMENTS
+
+Before CRR:
+✅ Versioning ON in both buckets
+✅ Different regions
+
+STEP 1 — Create Destination Bucket
+
+Create another bucket.
+
+Example:
+
+dest-crr-bucket-123
+
+Choose DIFFERENT region.
+
+Example:
+
+Ohio
+
+Enable versioning there too.
+
+STEP 2 — Open Source Bucket
+
+Open original bucket.
+
+Go to:
+
+Management tab
+STEP 3 — Replication Rules
+
+Find:
+
+Replication rules
+
+Click:
+🟧 Create replication rule
+
+STEP 4 — Configure Rule
+
+Enter:
+
+academy-crr-rule
+
+Status:
+🔘 Enabled
+
+Scope:
+🔘 Apply to all objects
+
+STEP 5 — Select Destination Bucket
+
+Choose:
+🔘 Another bucket
+
+Select destination bucket.
+
+STEP 6 — IAM Role
+
+Select:
+🔘 Use AWS-managed role
+
+STEP 7 — Save Rule
+
+Click:
+🟧 Save
+
+✅ Replication active.
+
+STEP 8 — Test CRR
+
+Upload file in source bucket.
+
+Example:
+
+image.png
+
+Now open destination bucket.
+
+If same file appears automatically:
+✅ CRR successful.
+
+PART 4 — Static Website Hosting
+
+You can host HTML website using S3.
+
+STEP 1 — Create Files
+
+Create:
+
+index.html
+
+and
+
+error.html
+Example index.html
+<h1>Hello Harsha</h1>
+<h2>My First AWS Website</h2>
+Example error.html
+<h1>404 Error</h1>
+<h2>Page Not Found</h2>
+
+Save both files.
+
+STEP 2 — Create Bucket
+
+Create new bucket.
+
+Example:
+
+my-static-site-bucket
+
+Disable:
+❌ Block Public Access
+
+Create bucket.
+
+STEP 3 — Upload HTML Files
+
+Inside bucket:
+Objects → Upload
+
+Upload:
+
+index.html
+error.html
+STEP 4 — Enable Static Website Hosting
+
+Go:
+
+Properties tab
+
+Scroll down.
+
+Find:
+
+Static website hosting
+
+Click:
+🟦 Edit
+
+STEP 5 — Configure Hosting
+
+Select:
+🔘 Enable
+
+Choose:
+🔘 Host a static website
+
+Enter:
+
+Index document:
+
+index.html
+
+Error document:
+
+error.html
+
+Click:
+🟧 Save changes
+
+✅ Website hosting enabled.
+
+STEP 6 — Make Website Public
+
+Go:
+
+Permissions
+
+ACL → Edit
+
+Enable:
+☑ Everyone → Read
+
+Save.
+
+STEP 7 — Make HTML Files Public
+
+For BOTH files:
+
+open file
+Permissions
+ACL Edit
+Everyone → Read
+Save
+STEP 8 — Open Website
+
+Go:
+Properties → Static website hosting
+
+Copy:
+
+Bucket website endpoint
+
+Looks like:
+
+http://mybucket.s3-website-ap-south-1.amazonaws.com
+
+Paste in browser.
+
+✅ Website opens.
+
+STEP 9 — Test Error Page
+
+Add wrong URL:
+
+http://bucket-url/abc.html
+
+You should see:
+✅ error.html page.
